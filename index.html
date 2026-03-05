@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mango Splash — Pure Tropical Refreshment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-brand">MANGO SPLASH</div>
+    <div class="loader-bar-wrap">
+      <div id="loader-bar"></div>
+    </div>
+    <div id="loader-percent">0%</div>
+  </div>
+
+  <!-- FIXED HEADER -->
+  <header class="site-header">
+    <nav>
+      <a href="#" class="logo">MANGO SPLASH</a>
+      <ul class="nav-links">
+        <li><a href="#">Story</a></li>
+        <li><a href="#">Flavours</a></li>
+        <li><a href="#">Where to Buy</a></li>
+        <li><a href="#" class="nav-cta">Order Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO (standalone 100vh) -->
+  <section class="hero-standalone" id="hero">
+    <div class="hero-inner">
+      <span class="section-label">001 / Welcome</span>
+      <h1 class="hero-heading">
+        <span class="word">MANGO</span>
+        <span class="word">SPLASH</span>
+      </h1>
+      <p class="hero-tagline">Pure tropical energy. Zero compromise.</p>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- CANVAS (fixed, full viewport) -->
+  <div class="canvas-wrap" id="canvas-wrap">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <!-- DARK OVERLAY (fixed) -->
+  <div id="dark-overlay"></div>
+
+  <!-- MARQUEE (fixed) -->
+  <div class="marquee-wrap" id="marquee" data-scroll-speed="-22">
+    <div class="marquee-text">
+      MANGO SPLASH&nbsp;&nbsp;•&nbsp;&nbsp;PURE REFRESHMENT&nbsp;&nbsp;•&nbsp;&nbsp;TROPICAL ENERGY&nbsp;&nbsp;•&nbsp;&nbsp;REAL FRUIT&nbsp;&nbsp;•&nbsp;&nbsp;ZERO COMPROMISE&nbsp;&nbsp;•&nbsp;&nbsp;MANGO SPLASH&nbsp;&nbsp;•&nbsp;&nbsp;PURE REFRESHMENT&nbsp;&nbsp;•&nbsp;&nbsp;TROPICAL ENERGY&nbsp;&nbsp;•&nbsp;&nbsp;REAL FRUIT&nbsp;&nbsp;•&nbsp;&nbsp;
+    </div>
+  </div>
+
+  <!-- SCROLL CONTAINER -->
+  <div id="scroll-container">
+
+    <!-- Section 01 — Pure Mango -->
+    <section
+      class="scroll-section section-content align-left"
+      data-enter="8"
+      data-leave="22"
+      data-animation="slide-left"
+    >
+      <div class="section-inner">
+        <span class="section-label">002 / Origin</span>
+        <h2 class="section-heading">Pure Mango.<br>Nothing Else.</h2>
+        <p class="section-body">Sourced from sun-drenched orchards at peak ripeness. No artificial colours, no added sugars — just the real thing in every sip.</p>
+        <p class="section-sub">Hand-picked at 4 a.m. when the fruit is coldest and sweetest. From orchard to bottle in under 12 hours.</p>
+      </div>
+    </section>
+
+    <!-- Section 02 — Cold-Pressed -->
+    <section
+      class="scroll-section section-content align-left"
+      data-enter="22"
+      data-leave="36"
+      data-animation="fade-up"
+    >
+      <div class="section-inner">
+        <span class="section-label">003 / Process</span>
+        <h2 class="section-heading">Cold-Pressed<br>Perfection.</h2>
+        <p class="section-body">Our cold-press method locks in every nutrient and drop of flavour. Bottled within hours of pressing so you taste the orchard, not the factory.</p>
+        <p class="section-sub">No heat. No pasteurisation shortcuts. Pure hydraulic pressure that squeezes out every last drop of goodness.</p>
+      </div>
+    </section>
+
+    <!-- Stats Section (dark overlay) -->
+    <section
+      class="scroll-section section-stats"
+      data-enter="40"
+      data-leave="58"
+      data-animation="stagger-up"
+    >
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-number" data-value="100" data-decimals="0">0</span>
+          <span class="stat-suffix">%</span>
+          <span class="stat-label">Real Fruit Juice</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="0" data-decimals="0">0</span>
+          <span class="stat-suffix">g</span>
+          <span class="stat-label">Added Sugar</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="250" data-decimals="0">0</span>
+          <span class="stat-suffix">ml</span>
+          <span class="stat-label">Pure Per Bottle</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03 — Taste the Tropics -->
+    <section
+      class="scroll-section section-content align-left"
+      data-enter="58"
+      data-leave="70"
+      data-animation="slide-right"
+    >
+      <div class="section-inner">
+        <span class="section-label">004 / Experience</span>
+        <h2 class="section-heading">Taste the<br>Tropics.</h2>
+        <p class="section-body">Bright. Vibrant. Unapologetically tropical. Whether post-workout or mid-afternoon, Mango Splash is your instant escape.</p>
+        <p class="section-sub">Close your eyes. That first hit of sun-ripened sweetness lands like standing barefoot in a mango grove at noon.</p>
+      </div>
+    </section>
+
+    <!-- Section 04 — Unleash Freshness -->
+    <section
+      class="scroll-section section-content align-left"
+      data-enter="70"
+      data-leave="82"
+      data-animation="rotate-in"
+    >
+      <div class="section-inner">
+        <span class="section-label">005 / Freshness</span>
+        <h2 class="section-heading">Unleash the<br>Freshness.</h2>
+        <p class="section-body">A burst of tropical flavour that hits immediately and lingers. Crafted for those who refuse to settle for ordinary refreshment.</p>
+        <p class="section-sub">The chill hits your throat. The sweetness follows. Then a clean, lasting finish that makes every other drink feel flat.</p>
+      </div>
+    </section>
+
+    <!-- CTA Section (persists) -->
+    <section
+      class="scroll-section section-cta align-left"
+      data-enter="84"
+      data-leave="100"
+      data-animation="scale-up"
+      data-persist="true"
+    >
+      <div class="section-inner">
+        <span class="section-label">006 / Get Yours</span>
+        <h2 class="section-heading">Ready for<br>a Splash?</h2>
+        <p class="section-body">Available online and in stores across the country. Free delivery on orders over £20.</p>
+        <a href="#" class="cta-button">Order Now →</a>
+        <p class="section-note">Also available at Waitrose, Whole Foods &amp; independents.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
