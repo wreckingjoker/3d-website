@@ -1,11 +1,18 @@
 /* MANGO SPLASH -- app.js */
-const FRAME_COUNT = 145;
-const FRAME_SPEED = 2.0;
-const IMAGE_SCALE = 0.87;
-const BG_COLOR = "#FFD23F";
-const frames = new Array(FRAME_COUNT);
+const FRAME_COUNT  = 145;
+const FRAME_COUNT2 = 145;
+const FRAME_SPEED  = 2.0;
+const IMAGE_SCALE  = 0.87;
+const BG_COLOR     = "#FFD23F";
+// Video 1 occupies scroll 0–50%, 1-second hold 50–53%, video 2 starts at 53%
+const VIDEO2_START = 0.50;
+const VIDEO2_DELAY = 0.03; // hold last frame of video 1 before video 2 begins
+
+const frames  = new Array(FRAME_COUNT);
+const frames2 = new Array(FRAME_COUNT2);
 let currentFrame = 0;
 let allLoaded = false;
+let frames2Loaded = false;
 let sampledBg = BG_COLOR;
 let sampleCounter = 0;
 const loader      = document.getElementById("loader");
@@ -19,26 +26,38 @@ const marqueeWrap = document.getElementById("marquee");
 const scrollCont  = document.getElementById("scroll-container");
 const ctx = canvas.getContext("2d");
 
+let activeVideo = 1;
+
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = window.innerWidth  * dpr;
   canvas.height = window.innerHeight * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  drawFrame(currentFrame);
+  if (activeVideo === 2) { drawFrame2(currentFrame); } else { drawFrame(currentFrame); }
 }
 window.addEventListener("resize", resizeCanvas);
 
 function sampleBgColor(img) {
+  // Sample 5 edge points and average them for a representative bg colour
   const tmp = document.createElement("canvas");
-  tmp.width = 4; tmp.height = 4;
+  tmp.width = img.naturalWidth; tmp.height = img.naturalHeight;
   const tc = tmp.getContext("2d");
-  tc.drawImage(img, 0, 0, 4, 4);
-  const d = tc.getImageData(0, 0, 1, 1).data;
-  return "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")";
+  tc.drawImage(img, 0, 0);
+  const w = img.naturalWidth, h = img.naturalHeight;
+  const pts = [
+    tc.getImageData(2, h - 3, 1, 1).data,           // bottom-left
+    tc.getImageData(w - 3, h - 3, 1, 1).data,        // bottom-right
+    tc.getImageData(Math.floor(w / 2), h - 3, 1, 1).data, // bottom-centre
+    tc.getImageData(2, Math.floor(h / 2), 1, 1).data,     // mid-left
+    tc.getImageData(w - 3, Math.floor(h / 2), 1, 1).data, // mid-right
+  ];
+  const r = Math.round(pts.reduce(function(s, p) { return s + p[0]; }, 0) / pts.length);
+  const g = Math.round(pts.reduce(function(s, p) { return s + p[1]; }, 0) / pts.length);
+  const b = Math.round(pts.reduce(function(s, p) { return s + p[2]; }, 0) / pts.length);
+  return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-function drawFrame(index) {
-  const img = frames[index];
+function drawImg(img) {
   if (!img || !img.complete) return;
   const cw = window.innerWidth;
   const ch = window.innerHeight;
@@ -51,7 +70,16 @@ function drawFrame(index) {
   const dy = (ch - dh) / 2;
   ctx.fillStyle = sampledBg;
   ctx.fillRect(0, 0, cw, ch);
+  document.body.style.background = sampledBg;
   ctx.drawImage(img, dx, dy, dw, dh);
+}
+
+function drawFrame(index) {
+  drawImg(frames[index]);
+}
+
+function drawFrame2(index) {
+  drawImg(frames2[index]);
 }
 
 function padded(n) { return String(n).padStart(4, "0"); }
@@ -68,10 +96,24 @@ function loadFrames() {
       loaderBar.style.width = pct + "%";
       loaderPct.textContent = pct + "%";
       if (loaded === 10) { resizeCanvas(); drawFrame(0); }
-      if (loaded === FRAME_COUNT) { allLoaded = true; hideLoader(); }
+      if (loaded === FRAME_COUNT) { allLoaded = true; hideLoader(); loadFrames2(); }
     };
     img.src = "frames/frame_" + padded(i) + ".webp";
     frames[idx] = img;
+  }
+}
+
+function loadFrames2() {
+  let loaded2 = 0;
+  for (let i = 1; i <= FRAME_COUNT2; i++) {
+    const img = new Image();
+    const idx = i - 1;
+    img.onload = function() {
+      loaded2++;
+      if (loaded2 === FRAME_COUNT2) { frames2Loaded = true; }
+    };
+    img.src = "frames2/frame_" + padded(i) + ".webp";
+    frames2[idx] = img;
   }
 }
 
@@ -90,7 +132,7 @@ function initAll() {
   initFrameScroll();
   positionSections();
   initSectionAnimations();
-  initDarkOverlay(0.38, 0.60);
+  // initDarkOverlay disabled — no dark shade over any section
   initMarquee();
   initCounters();
 }
@@ -137,15 +179,37 @@ function initFrameScroll() {
     end: "bottom bottom",
     scrub: true,
     onUpdate: function(self) {
-      const accelerated = Math.min(self.progress * FRAME_SPEED, 1);
-      const index = Math.min(Math.floor(accelerated * FRAME_COUNT), FRAME_COUNT - 1);
-      if (index !== currentFrame) {
+      const p = self.progress;
+
+      if (p < VIDEO2_START) {
+        // Video 1: maps 0–VIDEO2_START scroll → full frame set 1
+        activeVideo = 1;
+        const localP = p / VIDEO2_START;
+        const accelerated = Math.min(localP * FRAME_SPEED, 1);
+        const index = Math.min(Math.floor(accelerated * FRAME_COUNT), FRAME_COUNT - 1);
         currentFrame = index;
         sampleCounter++;
-        if (sampleCounter % 20 === 0 && frames[index] && frames[index].complete) {
+        if (sampleCounter % 5 === 0 && frames[index] && frames[index].complete) {
           sampledBg = sampleBgColor(frames[index]);
         }
         requestAnimationFrame(function() { drawFrame(currentFrame); });
+      } else if (p < VIDEO2_START + VIDEO2_DELAY) {
+        // Hold on last frame of video 1 during the delay gap
+        activeVideo = 1;
+        requestAnimationFrame(function() { drawFrame(FRAME_COUNT - 1); });
+      } else {
+        // Video 2: maps (VIDEO2_START + VIDEO2_DELAY)–1.0 scroll → full frame set 2
+        activeVideo = 2;
+        const v2End = 1 - VIDEO2_START - VIDEO2_DELAY;
+        const localP = (p - VIDEO2_START - VIDEO2_DELAY) / v2End;
+        const accelerated = Math.min(localP * FRAME_SPEED, 1);
+        const index = Math.min(Math.floor(accelerated * FRAME_COUNT2), FRAME_COUNT2 - 1);
+        currentFrame = index;
+        sampleCounter++;
+        if (frames2Loaded && frames2[index] && frames2[index].complete) {
+          if (sampleCounter % 5 === 0) { sampledBg = sampleBgColor(frames2[index]); }
+          requestAnimationFrame(function() { drawFrame2(index); });
+        }
       }
     },
   });
@@ -180,7 +244,7 @@ function setupSectionAnimation(section) {
   const enter   = parseFloat(section.dataset.enter) / 100;
   const leave   = parseFloat(section.dataset.leave) / 100;
   const children = section.querySelectorAll(
-    ".section-label, .section-heading, .section-body, .section-sub, .section-note, .cta-button, .stat"
+    ".section-label, .section-heading, .section-body, .section-sub, .section-note, .cta-button, .stat, .glass-card"
   );
   const tl = buildTimeline(type, children);
   let played = false;

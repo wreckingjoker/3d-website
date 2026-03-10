@@ -64,6 +64,64 @@ canvas { display: block; width: 100%; height: 100%; }
 .cta-button:hover { background: var(--accent-light); transform: translateY(-2px); }
 .section-sub { margin-top: 1rem; font-size: clamp(0.8rem, 1.05vw, 0.95rem); line-height: 1.7; font-weight: 300; color: rgba(255,255,255,0.92); max-width: 34ch; }
 .section-note { margin-top: 1.2rem; font-size: 0.72rem; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; }
+/* ── Glass Section ─────────────────────── */
+.section-glass {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5vw;
+}
+.glass-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 24px;
+  padding: 3rem 3.5rem;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.glass-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 1.0;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  margin-bottom: 1.5rem;
+}
+.glass-divider {
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+.glass-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.glass-pill {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+}
+.glass-body {
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  line-height: 1.75;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.92);
+}
+
 @media (max-width: 768px) {
   .hero-inner { padding-right: 6vw; }
   .hero-heading { font-size: clamp(4rem, 18vw, 7rem); }
